@@ -5,6 +5,7 @@ DesktopOrganizer, an app that can open apps/desktop files, inspired by macOS 26+
 > **UI language: Chinese only.** Built with **WinUI 3** (Windows App SDK) for native Windows 11 Mica/Acrylic visuals.
 
 ![Screenshot](./Real.png)
+![Screenshot (Dark)](./Real2.png)
 
 ## About
 
