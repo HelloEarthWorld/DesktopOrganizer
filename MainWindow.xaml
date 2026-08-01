@@ -1,0 +1,15 @@
+<Window
+    x:Class="DesktopOrganizer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:DesktopOrganizer"
+    mc:Ignorable="d"
+    Title="Apps窗口">
+
+    <!-- 这里不用 x:Bind，只放纯事件/属性的 XAML，规避 Window 不是 FrameworkElement 导致的编译问题。
+         真正的界面内容和数据绑定都在 AppShell（UserControl）里。
+         不再有托盘/后台常驻：关窗口就是正常退出进程。 -->
+    <local:AppShell x:Name="Shell"/>
+</Window>

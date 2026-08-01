@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>DesktopOrganizer</RootNamespace>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>false</EnableMsixTooling>
+    <WindowsPackageType>None</WindowsPackageType>
+
+    <!-- 自包含 + ReadyToRun：启动快、不依赖额外安装、内存/磁盘占用低。
+         裁剪（PublishTrimmed）对 WinUI3 不可用：XAML 运行时要靠反射实例化
+         AppShell/转换器等类型，裁掉后直接 "Cannot create instance of type" 崩溃，
+         TrimmerRootAssembly 也救不回来（官方不支持 XAML 应用裁剪），所以禁用 -->
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- 快捷方式解析（ShortcutResolver）要用 WScript.Shell 的 COM 接口，
+         裁剪默认会禁用内置 COM，必须显式打开，否则 .lnk 全部解析失败 -->
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationIcon>1cppn-vroyb-001.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Copyright>© 2026 _Caihongmao_(bilibili). All rights reserved.</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="1cppn-vroyb-001.ico" />
+  </ItemGroup>
+
+  <!-- dotnet publish 会丢掉应用自己的 XBF/PRI（WinUI3 已知坑），
+       从常规构建输出（bin）里补拷到发布目录 -->
+  <Target Name="CopyWinUIAppResourcesToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <_WinUIPriXbf Include="$(OutputPath)*.pri" />
+      <_WinUIPriXbf Include="$(OutputPath)*.xbf" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_WinUIPriXbf)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.3.1" />
+    <!-- 提取系统图标要用到 System.Drawing.Icon/Bitmap，裁剪模式下不会自动带上，得显式引用 -->
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+</Project>
