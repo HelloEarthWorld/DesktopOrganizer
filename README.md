@@ -6,6 +6,7 @@ DesktopOrganizer, an app that can open apps/desktop files, inspired by macOS 26+
 
 ![Screenshot](./Real.png)
 ![Screenshot (Dark)](./Real2.png)
+* 该展示图已替换苹方字体，请以实际效果为准
 
 ## About
 
